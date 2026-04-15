@@ -1,2 +1,3 @@
 # swiss_re_assignment
-Coding assignement for Swiss Re recruitment
+
+Coding assignment for Swiss Re recruitment process

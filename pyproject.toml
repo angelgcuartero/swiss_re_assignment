@@ -1,0 +1,7 @@
+[project]
+name = "swiss-re-assignment"
+version = "0.1.0"
+description = "Coding assignment for Swiss Re recruitment process"
+readme = "README.md"
+requires-python = ">=3.14"
+dependencies = []
