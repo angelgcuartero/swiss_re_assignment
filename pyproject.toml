@@ -5,5 +5,8 @@ description = "Coding assignment for Swiss Re recruitment process"
 readme = "README.md"
 requires-python = ">=3.14"
 dependencies = [
+    "logging>=0.4.9.6",
     "pytest>=9.0.3",
+    "typer>=0.24.1",
 ]
+scripts = {"swiss-re-assignment" = "sr_cli.main:app"}
