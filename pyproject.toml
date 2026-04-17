@@ -25,6 +25,9 @@ dev = [
 package = true
 
 [tool.ruff]
+indent-width = 4
+line-length = 132
+exclude = ["build"]
 lint.select = ["E4", "E7", "E9", "F", "B"]
 lint.ignore = ["D104","D107","E203", "E501", "F401", "F403"]
 lint.unfixable = ["B"]

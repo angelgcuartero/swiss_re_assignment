@@ -19,3 +19,12 @@ def is_valid_ip(ip: str) -> bool:
     #     if not part.isdigit() or not 0 <= int(part) <= 255:
     #         return False
     # return True
+
+
+def is_float(value: str) -> bool:
+    """Check if the provided string can be converted to a float."""
+    try:
+        float(value)
+        return True
+    except ValueError:
+        return False
