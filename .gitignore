@@ -208,3 +208,6 @@ __marimo__/
 
 # MacOS specific files
 .DS_Store
+
+# Project specific files
+output/

@@ -3,10 +3,11 @@
 import logging
 import os
 import time
-from ast import List
 from collections import Counter
+from pathlib import Path
+from typing import Generator
 
-from sr_cli.utils import is_float
+from sr_cli.utils import calculate_stats, get_formatted_line, get_output_file_name, is_float
 
 # Set up logging configuration
 log_level = os.getenv("LOG_LEVEL", "INFO").upper()
@@ -14,72 +15,65 @@ logging.basicConfig(level=log_level, format="%(asctime)s - %(name)s - %(levelnam
 log = logging.getLogger(__name__)
 
 
-def read_data_file(file_path: str) -> dict[str, int | str | float]:
+def process_data_file(input_file: Path, output_path: Path) -> dict[str, int | str | float]:
     """Read the log file and process its contents.
 
     Args:
-        file_path (str): The path to the log file to be processed.
-
+        input_file (Path): The path to the log file to be processed.
+        output_path (Path): The path to the output file where results will be saved.
     Returns:
         dict[str, int | str | float]: A dictionary containing the processed results.
-
     """
-    res_num_lines = 0
-    res_mfip = ""
-    res_lfip = ""
-    res_eps: float = 0.0
-    res_bytes: int = 0
-    res_ip = Counter()
-
-    start_time = time.perf_counter()
-    with open(file_path, mode="r") as file:
-        for line in file:
-            if not line.strip():
-                continue
-            res_num_lines += 1
-            response_header_size, client_ip, response_size = parse_line(line.strip())
-            res_bytes += response_header_size + response_size
-            res_ip[client_ip] += 1
-    end_time = time.perf_counter()
-    total_time = end_time - start_time
-
-    # Calculate most and least frequent IPs
-    if res_ip:
-        res_mfip = res_ip.most_common(1)[0][0]
-        res_lfip = res_ip.most_common()[-1][0]
-
-    # Calculate events per second
-    res_eps = res_num_lines / total_time if total_time > 0 else None  # Avoid division by zero
-
-    return {
-        "num_lines": res_num_lines,
-        "mfip": res_mfip,
-        "lfip": res_lfip,
-        "eps": res_eps,
-        "bytes": res_bytes,
-    }
+    output_file = get_output_file_name(input_file, output_path)
+    num_lines, num_bytes, ip_counter, total_time = process_lines(input_file, output_file)
+    return calculate_stats(num_lines, ip_counter, total_time, num_bytes)
 
 
-def parse_line(fields: List[str]) -> tuple[int, str, int]:
-    """Parse a log line and extract relevant fields. This is an example of the list of fields:
-
-    Field 1: 1157689324.156 [Timestamp in seconds since the epoch]
-    Field 2: 1372 [Response header size in bytes]
-    Field 3: 10.105.21.199 [Client IP address]
-    Field 4: TCP_MISS/200 [HTTP response code]
-    Field 5: 399 [Response size in bytes]
-    Field 6: GET [HTTP request method]
-    Field 7: http://www.google-analytics.com/__utm.gif? [URL]
-    Field 8: badeyek [Username]
-    Field 9: DIRECT/66.102.9.147 [Type of access/destination IP address]
-    Field 10: image/gif [Response type]
+def process_lines(input_file: Path, output_file: Path) -> tuple[int, int, Counter, float]:
+    """Process each line of the log file, extract relevant data, and write formatted output to the output file.
 
     Args:
-        fields (List[str]): A list of strings representing the fields in a log line.
+        input_file (Path): The path to the log file to be processed.
+        output_file (Path): The path to the output file where results will be saved.
+    Returns:
+        tuple[int, int, Counter, float]: A tuple containing the number of lines processed, the total number of bytes, a Counter for client IPs, and the total processing time.
+    """
+    num_lines: int = 0
+    num_bytes: int = 0
+    ip = Counter()
+
+    with open(output_file, mode="w") as out_file:
+        out_file.write("[\n")
+        first_line = True
+        start_time = time.perf_counter()
+        for line in line_reader(input_file):
+            if not line.strip():  # Skip empty lines
+                continue
+
+            if not first_line:
+                out_file.write(",\n")
+            first_line = False
+
+            num_lines += 1
+            num_bytes += len(line)  # Calculate bytes based on the original line
+            parsed_line = parse_line(line.strip())
+            client_ip = parsed_line.get("client_ip", "")
+            ip[client_ip] += 1
+            out_file.write(get_formatted_line(parsed_line))
+        end_time = time.perf_counter()
+        out_file.write("\n]")
+    total_time = end_time - start_time
+    return num_lines, num_bytes, ip, total_time
+
+
+def parse_line(fields: list[str]) -> dict[str, int | str | float]:
+    """Parse a log line and extract relevant fields. This is an example of the list of fields.
+
+    Args:
+        fields (list[str]): A list of strings representing the fields in a log line.
 
     Returns:
         tuple[int, str, int]: A tuple containing the response header size, client IP, and response size.
-
     """
     # Extract the first field (timestamp) and strip and split the rest
     try:
@@ -121,3 +115,40 @@ def parse_line(fields: List[str]) -> tuple[int, str, int]:
     )
 
     return response
+
+
+def get_file_list(input_path: Path) -> list[Path]:
+    """Get a list of files from the input path.
+
+    Args:
+        input_path: The path to the input file or directory.
+
+    Returns:
+        list[Path]: A list of file paths.
+
+    """
+    if input_path.is_file():
+        return [input_path]
+    elif input_path.is_dir():
+        return [f for f in input_path.iterdir() if f.is_file()]
+    else:
+        log.error(f"Invalid input path: {input_path}")
+        return []
+
+
+def line_reader(file_path: Path) -> Generator[str]:
+    """Read a line from the file.
+
+    Args:
+        file_path: The path to the file to be read.
+
+    Yields:
+        str: The lines from the file.
+    """
+    with open(file_path, mode="r") as file:
+        for line in file:
+            yield line
+
+
+if __name__ == "__main__":
+    ...
