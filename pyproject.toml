@@ -5,8 +5,37 @@ description = "Coding assignment for Swiss Re recruitment process"
 readme = "README.md"
 requires-python = ">=3.14"
 dependencies = [
-    "logging>=0.4.9.6",
-    "pytest>=9.0.3",
-    "typer>=0.24.1",
+    "logging>=0.4.9.6", 
+    "typer>=0.24.1"
 ]
-scripts = {"swiss-re-assignment" = "sr_cli.main:app"}
+
+scripts = { "swiss-re-assignment" = "sr_cli.main:app" }
+
+[dependency-groups]
+test = [
+    "pytest", 
+    "pytest-cov", 
+    "pytest-mock"
+]
+dev = [
+    "ruff"
+]
+
+[tool.uv]
+package = true
+
+[tool.ruff]
+indent-width = 4
+line-length = 132
+exclude = ["build"]
+lint.select = ["E4", "E7", "E9", "F", "B"]
+lint.ignore = ["D104","D107","E203", "E501", "F401", "F403"]
+lint.unfixable = ["B"]
+lint.pydocstyle.convention = "pep257"
+lint.per-file-ignores = { "__init__.py" = ["E402"], "**/{tests,docs,tools}/*" = ["E402"] }
+fix = true
+
+format.quote-style = "double"
+format.indent-style = "space"
+format.skip-magic-trailing-comma = false
+format.line-ending = "auto"

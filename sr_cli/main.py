@@ -3,12 +3,11 @@
 import logging
 import os
 from pathlib import Path
-from typing import Annotated, List
+from typing import Annotated
 
 import typer
 
-from sr_cli.output import generate_output_file
-from sr_cli.process import process_log_files
+from sr_cli.process import get_file_list, process_data_file
 
 # Set up logging configuration
 log_level = os.getenv("LOG_LEVEL", "INFO").upper()
@@ -20,17 +19,22 @@ app = typer.Typer()
 @app.command()
 def process(
     input: Annotated[
-        List[Path],
+        Path,
         typer.Argument(
-            help="List of paths to the input log files",
+            help="Path to the input log file/s",
             exists=True,
-            file_okay=True,
-            dir_okay=False,
+            file_okay=False,
+            dir_okay=True,
             readable=True,
             resolve_path=True,
         ),
     ],
-    output: Annotated[Path, typer.Argument(help="Path to the output file")],
+    output: Annotated[
+        Path,
+        typer.Argument(
+            help="Path to the output file/s", exists=True, file_okay=False, dir_okay=True, writable=True, resolve_path=True
+        ),
+    ],
     mfip: Annotated[bool, typer.Option("--mfip", help="Calculate the most frequent IP")] = False,
     lfip: Annotated[bool, typer.Option("--lfip", help="Calculate the least frequent IP")] = False,
     eps: Annotated[bool, typer.Option("--eps", help="Calculate events per second")] = False,
@@ -47,16 +51,22 @@ def process(
         lfip (bool): Flag to calculate the least frequent IP.
         eps (bool): Flag to calculate events per second.
         bytes (bool): Flag to calculate total bytes exchanged.
+
     """
-    # Pass the flags as keyword arguments to the processing function
-    kwargs = {
-        "calculate_mfip": mfip,
-        "calculate_lfip": lfip,
-        "calculate_eps": eps,
-        "calculate_bytes": bytes,
-    }
-    res_num_lines, res_mfip, res_lfip, res_eps, res_bytes = process_log_files(input, output, **kwargs)
-    generate_output_file(output, res_num_lines, res_mfip, res_lfip, res_eps, res_bytes)
+    input_files = get_file_list(input)
+
+    for file in input_files:
+        log.info(f"Processing file: {file}")
+        extracted_data = process_data_file(file, output)
+
+        if mfip:
+            log.info(f"Most frequent IP: {extracted_data.get('mfip')}")
+        if lfip:
+            log.info(f"Least frequent IP: {extracted_data.get('lfip')}")
+        if eps:
+            log.info(f"Events per second: {extracted_data.get('eps')}")
+        if bytes:
+            log.info(f"Total bytes processed: {extracted_data.get('bytes')}")
 
 
 if __name__ == "__main__":
