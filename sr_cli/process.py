@@ -137,7 +137,7 @@ def get_file_list(input_path: Path) -> list[Path]:
 
 
 def line_reader(file_path: Path) -> Generator[str]:
-    """Read a line from the file.
+    """Create a generator that yields lines from the file.
 
     Args:
         file_path: The path to the file to be read.
