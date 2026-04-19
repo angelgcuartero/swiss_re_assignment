@@ -21,7 +21,7 @@ def process(
     input: Annotated[
         Path,
         typer.Argument(
-            help="Path to the input log file/s",
+            help="Path to the input file/s",
             exists=True,
             file_okay=False,
             dir_okay=True,
@@ -43,8 +43,8 @@ def process(
     """Do main CLI task for the swiss-re-assignment.
 
     Args:
-        input (List[Path]): List of input log files.
-        output (Path): Path to the output file.
+        input (Path): Path to the input file/s.
+        output (Path): Path to the output file/s.
 
     Options:
         mfip (bool): Flag to calculate the most frequent IP.
