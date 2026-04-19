@@ -17,7 +17,7 @@ jobs:
         env:
           SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
         with:
-          command: test
+          command: uv run pytest
 
       # 2. Construir y Escanear la imagen Docker
       - name: Build Docker image
