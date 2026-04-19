@@ -24,23 +24,19 @@ permissions:
 jobs:
   test:
     if: ${{ github.actor != 'dependabot[bot]' }}
-    strategy:
-      max-parallel: 1
-      matrix:
-        version: [ "3.12" ]
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
       - name: Set up Python
         uses: actions/setup-python@v5
         with:
-          python-version: ${{ matrix.version }}
+          python-version: 3.12
       - name: Install dependencies
         run: |
           curl -LsSf https://astral.sh/uv/install.sh | sh
           uv sync --group test
       - name: Test package
         run: |
-          echo ==== Running tests with version ${{ matrix.version }} ====
+          echo ==== Running tests with version 3.12 ====
           export TMPDIR=${PWD}
           uv run pytest -vvv tests
