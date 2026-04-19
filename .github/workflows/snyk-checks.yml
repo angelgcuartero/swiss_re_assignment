@@ -11,13 +11,19 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      # 1. Escanear el código Python (dependencias)
-      - name: Snyk Python test
-        uses: snyk/actions/python-3.14@master
+      # Configuramos la versión de Python que tú quieras
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.14' 
+
+      # Usamos la CLI de Snyk directamente sobre el código
+      - name: Snyk Test
+        uses: snyk/actions/python@master # Nota: Sin el "-3.14"
         env:
           SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
         with:
-          command: uv run pytest
+          command: test
 
       # 2. Construir y Escanear la imagen Docker
       - name: Build Docker image
