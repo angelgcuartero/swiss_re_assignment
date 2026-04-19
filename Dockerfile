@@ -1,4 +1,4 @@
-FROM python:3.14-alpine
+FROM python:3.12-alpine
 COPY --from=ghcr.io/astral-sh/uv:latest /uv /uvx /bin/
 
 # Directorio de trabajo en el contenedor

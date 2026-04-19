@@ -1,0 +1,44 @@
+name: Snyk Security Scan
+
+on:
+  push:
+    branches: [ master ]
+  pull_request:
+
+jobs:
+  security:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      # Setup Python environment
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Install dependencies with uv
+        run: |
+          curl -LsSf https://astral.sh/uv/install.sh | sh
+          uv sync --no-install-project
+
+      # Use Snyk CLI to test for vulnerabilities
+      - name: Snyk Test
+        uses: snyk/actions/python@master
+        env:
+          SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
+        with:
+          command: test
+          args: --skip-unresolved --no-install
+
+      # Scan Docker image
+      - name: Build Docker image
+        run: docker build -t swiss-re-assignment:latest .
+
+      - name: Snyk Container monitor
+        uses: snyk/actions/docker@master
+        env:
+          SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
+        with:
+          image: swiss-re-assignment:latest
+          args: --file=Dockerfile

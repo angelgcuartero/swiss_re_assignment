@@ -136,7 +136,7 @@ def get_file_list(input_path: Path) -> list[Path]:
         return []
 
 
-def line_reader(file_path: Path) -> Generator[str]:
+def line_reader(file_path: Path) -> Generator[str, None, None]:
     """Create a generator that yields lines from the file.
 
     Args:

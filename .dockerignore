@@ -1,0 +1,32 @@
+# Git
+.git
+.gitignore
+
+# Python
+__pycache__
+*.py[cod]
+*$py.class
+*.egg-info
+.venv
+.env
+
+# Testing
+.pytest_cache
+.coverage
+htmlcov
+tests
+
+# Development
+.vscode
+.DS_Store
+.github
+
+# Build artifacts
+build
+dist
+build_tools
+
+# Misc
+docker-compose.yml
+Dockerfile
+LICENSE
