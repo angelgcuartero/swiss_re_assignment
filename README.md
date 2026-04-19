@@ -1,3 +1,5 @@
+[![Package tests](https://github.com/angelgcuartero/swiss_re_assignment/actions/workflows/python-pull-request.yml/badge.svg)](https://github.com/angelgcuartero/swiss_re_assignment/actions/workflows/python-pull-request.yml) [![Snyk Security Scan](https://github.com/angelgcuartero/swiss_re_assignment/actions/workflows/snyk-checks.yml/badge.svg)](https://github.com/angelgcuartero/swiss_re_assignment/actions/workflows/snyk-checks.yml)
+
 # Swiss Re Assignment
 
 Coding assignment for Swiss Re recruitment process. The requirements can be checked at [this document](./docs/coding-assignment-2023-06-02.md)
@@ -84,6 +86,8 @@ uv run swiss-re-assignment tests/resources tests/output --lfip --mfip --bytes --
 ```shell
 tests/run_tests.sh 
 ```
+
+This will
 
 ## Configuration
 
