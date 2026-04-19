@@ -37,7 +37,7 @@ jobs:
           python-version: ${{ matrix.version }}
       - name: Install dependencies
         run: |
-          url -LsSf https://astral.sh/uv/install.sh | sh
+          curl -LsSf https://astral.sh/uv/install.sh | sh
           uv sync
           pip install -e .
       - name: Test package
