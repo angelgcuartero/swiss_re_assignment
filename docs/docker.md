@@ -14,7 +14,7 @@ A Docker image will be created and tagged with the name and version included in 
 
 ## Checking vulneravilities in the Docker image
 
-Trivy can check the vulnerabilies of the Docker image built with the project. 
+Trivy can check the vulnerabilies of the Docker image built with the project.
 
 > **Note**: The Docker Unix socket `/var/run/docker.sock` needs to be mounted to run properly, at least in ARM64 architectures. This may not be needed in AMD64. This is a potential dangerous point as it provides root privileges on the host.
 
