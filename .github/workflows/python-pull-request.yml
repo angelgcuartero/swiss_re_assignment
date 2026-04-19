@@ -1,0 +1,47 @@
+# This workflow will test a Python Package when a PR is created, or updated.
+# For more information see: https://help.github.com/en/actions/language-and-framework-guides/using-python-with-github-actions#publishing-to-package-registries
+
+# This workflow uses actions that are not certified by GitHub.
+# They are provided by a third-party and are governed by
+# separate terms of service, privacy policy, and support
+# documentation.
+
+name: Package tests
+
+on:
+  pull_request:
+    branches:
+      - master
+    types:
+      - opened
+      - reopened
+      - synchronize
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  test:
+    if: ${{ github.actor != 'dependabot[bot]' }}
+    strategy:
+      max-parallel: 1
+      matrix:
+        version: [ "3.12" ]
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.version }}
+      - name: Install dependencies
+        run: |
+          url -LsSf https://astral.sh/uv/install.sh | sh
+          uv sync
+          pip install -e .
+      - name: Test package
+        run: |
+          echo ==== Running tests with version ${{ matrix.version }} ====
+          export TMPDIR=${PWD}
+          uv run pytest -vvv tests
