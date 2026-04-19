@@ -22,8 +22,8 @@ Trivy can check the vulnerabilies of the Docker image built with the project.
 $ docker run -v /var/run/docker.sock:/var/run/docker.sock aquasec/trivy image --severity CRITICAL,HIGH,UNKNOWN swiss-re-assignment:0.1.0
 2026-04-17T15:33:23Z    INFO    [vulndb] Need to update DB
 2026-04-17T15:33:23Z    INFO    [vulndb] Downloading vulnerability DB...
-2026-04-17T15:33:23Z    INFO    [vulndb] Downloading artifact...        repo="mirror.gcr.io/aquasec/trivy-db:2"
-3.80 MiB / 90.40 MiB
+2026-04-17T15:33:23Z    INFO    [vulndb] Downloading artifact...
+repo="mirror.gcr.io/aquasec/trivy-db:2" 3.80 MiB / 90.40 MiB
 [-->____________________________________________] 4.20% ? p/s ?21.06 MiB / 90.40 MiB
 [-------------->________________________________] 23.29% ? p/s ?38.88 MiB / 90.40 MiB
 [-------------------------->____________________] 43.00% ? p/s ?56.97 MiB / 90.40 MiB
