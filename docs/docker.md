@@ -141,7 +141,7 @@ Legend:
 This is an example of a typical Docker execution with parameters and options:
 
 ```shell
-docker run -it -v $(pwd):/app -e LOG_LEVEL=DEBUG swiss-re-assignment:0.1.0 tests/resources tests/output --lfip --mfip --bytes --eps
+docker run -it -v $(pwd):/app -e swiss-re-assignment:0.1.0 tests/resources tests/output --lfip --mfip --bytes --eps
 ```
 
 It is important to mount the current working directory over the `/app` folder in the container or it will not be able to read the parameter paths.
