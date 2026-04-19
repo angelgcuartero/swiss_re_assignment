@@ -11,21 +11,26 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      # Configuramos la versión de Python que tú quieras
+      # Setup Python environment
       - name: Set up Python
         uses: actions/setup-python@v5
         with:
-          python-version: '3.14' 
+          python-version: '3.12'
 
-      # Usamos la CLI de Snyk directamente sobre el código
+      - name: Install dependencies with uv
+        run: |
+          curl -LsSf https://astral.sh/uv/install.sh | sh
+          uv sync --no-install-project
+
+      # Use Snyk CLI to test for vulnerabilities
       - name: Snyk Test
-        uses: snyk/actions/python@master # Nota: Sin el "-3.14"
+        uses: snyk/actions/python@master
         env:
           SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
         with:
           command: test
 
-      # 2. Construir y Escanear la imagen Docker
+      # Scan Docker image
       - name: Build Docker image
         run: docker build -t swiss-re-assignment:latest .
 
