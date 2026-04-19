@@ -87,7 +87,11 @@ uv run swiss-re-assignment tests/resources tests/output --lfip --mfip --bytes --
 tests/run_tests.sh 
 ```
 
-This will
+This will run the tests for the module sr_cli and show a coverage report to the console:
+
+´´´shell
+uv run pytest tests --cov=sr_cli --cov-report term
+´´´
 
 ## Configuration
 
