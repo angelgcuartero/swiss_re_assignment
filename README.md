@@ -96,3 +96,7 @@ uv run pytest tests --cov=sr_cli --cov-report term
 ## Configuration
 
 The project is managed with `uv` and keeps the configuration in `pyproject.toml`
+
+## Docker tasks
+
+The tasks related to Docker, such as building the image, checking vulnerabilities and running the container are documented [in a separate document](./docs/docker.md).
