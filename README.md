@@ -22,14 +22,7 @@ Coding assignment for Swiss Re recruitment process. The requirements can be chec
 
 Follow `uv` installation instructions for your OS: <https://docs.astral.sh/uv/getting-started/installation/>
 
-### Create and activate the project environment with uv
-
-```shell
-uv init swiss_re_assignment
-. .env/bin/activate
-```
-
-### Install project dependencies with test tools
+### Recreate the virtual environment and install project dependencies with test tools
 
 ```shell
 uv sync --group dev --group test
