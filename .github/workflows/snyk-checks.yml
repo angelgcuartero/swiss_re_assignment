@@ -13,7 +13,7 @@ jobs:
 
       # 1. Escanear el código Python (dependencias)
       - name: Snyk Python test
-        uses: snyk/actions/python-3.9@master
+        uses: snyk/actions/python-3.14@master
         env:
           SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
         with:
