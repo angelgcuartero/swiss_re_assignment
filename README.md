@@ -35,8 +35,45 @@ uv sync --group dev --group test
 
 ### Run the CLI (example)
 
+Executing the command-line tool with the `--help` flag with show the parameters and options the too accepts:
+
+```console
+$ uv run swiss-re-assignment --help
+
+ Usage: swiss-re-assignment [OPTIONS] INPUT OUTPUT
+
+ Do main CLI task for the swiss-re-assignment.
+
+ Args:
+     input (Path): Path to the input file/s.
+     output (Path): Path to the output file/s.
+
+ Options:
+     mfip (bool): Flag to calculate the most frequent IP.
+     lfip (bool): Flag to calculate the least frequent IP.
+     eps (bool): Flag to calculate events per second.
+     bytes (bool): Flag to calculate total bytes exchanged.
+
+╭─ Arguments ───────────────────────────────────────────────────────────────────╮
+│ *    input       DIRECTORY  Path to the input file/s [required]               │
+│ *    output      DIRECTORY  Path to the output file/s [required]              │
+╰───────────────────────────────────────────────────────────────────────────────╯
+╭─ Options ─────────────────────────────────────────────────────────────────────╮
+│ --mfip                        Calculate the most frequent IP                  │
+│ --lfip                        Calculate the least frequent IP                 │
+│ --eps                         Calculate events per second                     │
+│ --bytes                       Calculate total bytes exchanged                 │
+│ --install-completion          Install completion for the current shell.       │
+│ --show-completion             Show completion for the current shell, to copy  │
+│                               it or customize the installation.               │
+│ --help                        Show this message and exit.                     │
+╰───────────────────────────────────────────────────────────────────────────────╯
+```
+
+This is an example of a typical execution with parameters and options:
+
 ```shell
-python -m your_package.main [COMMAND] [OPTIONS]
+uv run swiss-re-assignment tests/resources tests/output --lfip --mfip --bytes --eps
 ```
 
 ## Testing Guidelines
@@ -45,14 +82,9 @@ python -m your_package.main [COMMAND] [OPTIONS]
 - Unit tests are isolated from external state.
 
 ```shell
-cd tests
-./tests/run_tests.sh 
+tests/run_tests.sh 
 ```
 
 ## Configuration
 
-- Keep configuration in pyproject.toml
-
-## Build the container
-
-Make sure you have Docker installed on your machine: Follow the Docker installation instructions for your OS: <https://docs.astral.sh/uv/getting-started/installation/>
+The project is managed with `uv` and keeps the configuration in `pyproject.toml`
