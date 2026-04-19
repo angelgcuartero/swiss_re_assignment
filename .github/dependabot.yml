@@ -1,0 +1,14 @@
+# Dependabot configuration
+version: 2
+updates:
+  - package-ecosystem: "uv"
+    directory: "/"
+    target-branch: "master"
+    schedule:
+      interval: "weekly"
+    assignees:
+      - "angelgcuartero"
+    labels:
+      - "dependencies"
+    # Set to 0 to avoid version updates (only security updates)
+    open-pull-requests-limit: 0
