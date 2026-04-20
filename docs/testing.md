@@ -40,4 +40,4 @@ TOTAL                  114     26    77%
 
 ## Automatic check on development
 
-A GitHub CI job has been configured to run on a pull_request event. This will use Pytest to run the tests. The configuration for this job in the `.github` folder.
+A GitHub CI job has been configured to run on a pull_request event. This will use Pytest to run the tests. The configuration for this job in the `.github` folder. The results can be found [in the Actions folder](https://github.com/angelgcuartero/swiss_re_assignment/actions).
