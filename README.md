@@ -2,7 +2,7 @@
 
 [![Package tests](https://github.com/angelgcuartero/swiss_re_assignment/actions/workflows/python-pull-request.yml/badge.svg)](https://github.com/angelgcuartero/swiss_re_assignment/actions/workflows/python-pull-request.yml) [![Snyk Security Scan](https://github.com/angelgcuartero/swiss_re_assignment/actions/workflows/snyk-checks.yml/badge.svg)](https://github.com/angelgcuartero/swiss_re_assignment/actions/workflows/snyk-checks.yml)
 
-Coding assignment for Swiss Re recruitment process. The requirements can be checked at [this document](./docs/coding-assignment-2023-06-02.md)
+Coding assignment for Swiss Re recruitment process. The requirements can be checked in [this document](./docs/coding-assignment-2023-06-02.md)
 
 ## Features
 
@@ -73,22 +73,23 @@ uv run swiss-re-assignment tests/resources tests/output --lfip --mfip --bytes --
 
 ## Testing Guidelines
 
-- Tests are written in pytest-style in the `tests/` folder.
+- Tests are written in pytest-style in the `tests` folder.
 - Unit tests are isolated from external state.
 
-```shell
-tests/run_tests.sh 
-```
-
-This will run the tests for the module sr_cli and show a coverage report to the console:
-
-```shell
-uv run pytest tests --cov=sr_cli --cov-report term
-```
+More info about the tests can be found [in the documentation folder](./docs/testing.md).
 
 ## Configuration
 
-The project is managed with `uv` and keeps the configuration in `pyproject.toml`
+The project is managed with `uv` and keeps the configuration in `pyproject.toml`. This document includes:
+
+- The project dependencies.
+- A development group that includes ruff for formatting purposes.
+- A testing group that includes Pytest related packages.
+- Formatting parameters.
+
+## Formatting the code and checking the docstrings
+
+The code can be formatted with `ruff`. The same tool can be used to check if some docstring is missing or ill-formatted. Information about how to do this tasks in the [code formatting document](./docs/code_formatting.md).
 
 ## Docker tasks
 
