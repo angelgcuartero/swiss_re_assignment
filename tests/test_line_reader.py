@@ -5,6 +5,8 @@ import gzip
 import lzma
 import zipfile
 
+import pytest
+
 from sr_cli.line_reader import line_reader
 
 
@@ -72,3 +74,7 @@ def test_line_reader_no_extension(tmp_path):
     file_path.write_text(content)
     lines = list(line_reader(file_path))
     assert lines == ["line1\n", "line2"]
+
+
+if __name__ == "__main__":
+    pytest.main()

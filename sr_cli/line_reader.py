@@ -10,7 +10,7 @@ from pathlib import Path
 from typing import Generator
 
 
-def get_custom_reader(file_path) -> tuple:
+def get_custom_reader(file_path) -> tuple[callable, str]:
     """Return the appropriate reader function based on the file extension.
 
     Args:
@@ -25,7 +25,8 @@ def get_custom_reader(file_path) -> tuple:
         file_name = zf.namelist()[0]
 
         # Return a function that ignores the mode and returns the text stream
-        # ZipFile should be closed after reading, so adding the decorator @contextlib.contextmanager manages this resource properly
+        # ZipFile should be closed after reading, so adding the decorator
+        # contextlib.contextmanager manages this resource properly
         @contextmanager
         def zip_reader_wrapper(*args, **kwargs):
             raw_file = zf.open(file_name, "r")
