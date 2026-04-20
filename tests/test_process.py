@@ -107,7 +107,7 @@ def test_parse_line_short_line():
     assert result["response_type"] == ""
 
 
-def test_get_file_list_single_file(tmp_path):
+def test_get_file_list_single_file(tmp_path: Path):
     """Test get_file_list with a single file."""
     test_file = tmp_path / "test.txt"
     test_file.write_text("content")
@@ -116,7 +116,7 @@ def test_get_file_list_single_file(tmp_path):
     assert result == [test_file]
 
 
-def test_get_file_list_directory(tmp_path):
+def test_get_file_list_directory(tmp_path: Path):
     """Test get_file_list with a directory containing multiple files."""
     file1 = tmp_path / "file1.txt"
     file2 = tmp_path / "file2.txt"
@@ -129,13 +129,13 @@ def test_get_file_list_directory(tmp_path):
     assert file2 in result
 
 
-def test_get_file_list_empty_directory(tmp_path):
+def test_get_file_list_empty_directory(tmp_path: Path):
     """Test get_file_list with an empty directory."""
     result = get_file_list(tmp_path)
     assert result == []
 
 
-def test_get_file_list_directory_with_subdirs(tmp_path):
+def test_get_file_list_directory_with_subdirs(tmp_path: Path):
     """Test get_file_list ignores subdirectories."""
     file1 = tmp_path / "file1.txt"
     file1.write_text("content")
@@ -148,7 +148,7 @@ def test_get_file_list_directory_with_subdirs(tmp_path):
     assert result == [file1]
 
 
-def test_line_reader_single_line(tmp_path):
+def test_line_reader_single_line(tmp_path: Path):
     """Test line_reader with a file containing a single line."""
     test_file = tmp_path / "test.txt"
     test_file.write_text("single line")
@@ -158,7 +158,7 @@ def test_line_reader_single_line(tmp_path):
     assert lines[0] == "single line"
 
 
-def test_line_reader_multiple_lines(tmp_path):
+def test_line_reader_multiple_lines(tmp_path: Path):
     """Test line_reader with a file containing multiple lines."""
     test_file = tmp_path / "test.txt"
     test_file.write_text("line1\nline2\nline3\n")
@@ -170,7 +170,7 @@ def test_line_reader_multiple_lines(tmp_path):
     assert lines[2] == "line3\n"
 
 
-def test_line_reader_empty_file(tmp_path):
+def test_line_reader_empty_file(tmp_path: Path):
     """Test line_reader with an empty file."""
     test_file = tmp_path / "empty.txt"
     test_file.write_text("")
@@ -179,7 +179,7 @@ def test_line_reader_empty_file(tmp_path):
     assert len(lines) == 0
 
 
-def test_process_data_file_single_file(tmp_path):
+def test_process_data_file_single_file(tmp_path: Path):
     """Test process_data_file with a single log file."""
     input_file = tmp_path / "input.txt"
     output_path = tmp_path / "output"
@@ -198,7 +198,7 @@ def test_process_data_file_single_file(tmp_path):
     assert "mfip" in result
 
 
-def test_process_data_file_multiple_lines(tmp_path):
+def test_process_data_file_multiple_lines(tmp_path: Path):
     """Test process_data_file with multiple log lines."""
     input_file = tmp_path / "input.txt"
     output_path = tmp_path / "output"
@@ -216,7 +216,7 @@ def test_process_data_file_multiple_lines(tmp_path):
     assert isinstance(result["eps"], float)
 
 
-def test_process_data_file_creates_output_file(tmp_path):
+def test_process_data_file_creates_output_file(tmp_path: Path):
     """Test process_data_file creates an output file."""
     input_file = tmp_path / "input.txt"
     output_path = tmp_path / "output"
@@ -232,7 +232,7 @@ def test_process_data_file_creates_output_file(tmp_path):
     assert len(output_files) > 0
 
 
-def test_process_data_file_with_empty_lines(tmp_path):
+def test_process_data_file_with_empty_lines(tmp_path: Path):
     """Test process_data_file skips empty lines."""
     input_file = tmp_path / "input.txt"
     output_path = tmp_path / "output"
