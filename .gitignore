@@ -210,4 +210,5 @@ __marimo__/
 .DS_Store
 
 # Project specific files
-output/
+tests/resources/*
+tests/output/*
