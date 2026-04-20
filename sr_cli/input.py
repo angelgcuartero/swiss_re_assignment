@@ -3,11 +3,38 @@
 import bz2
 import gzip
 import io
+import json
+import logging
 import lzma
+import os
 import zipfile
 from contextlib import contextmanager
 from pathlib import Path
 from typing import Generator
+
+# Set up logging configuration
+log_level = os.getenv("LOG_LEVEL", "INFO").upper()
+logging.basicConfig(level=log_level, format="%(asctime)s - %(name)s - %(levelname)s - %(message)s")
+log = logging.getLogger(__name__)
+
+
+def get_file_list(input_path: Path) -> list[Path]:
+    """Get a list of files from the input path.
+
+    Args:
+        input_path: The path to the input file or directory.
+
+    Returns:
+        list[Path]: A list of file paths.
+
+    """
+    if input_path.is_file():
+        return [input_path]
+    elif input_path.is_dir():
+        return [f for f in input_path.iterdir() if f.is_file()]
+    else:
+        log.error(f"Invalid input path: {input_path}")
+        return []
 
 
 def get_custom_reader(file_path) -> tuple[callable, str]:

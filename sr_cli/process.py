@@ -6,8 +6,10 @@ import time
 from collections import Counter
 from pathlib import Path
 
-from sr_cli.line_reader import line_reader
-from sr_cli.utils import calculate_stats, get_formatted_line, get_output_file_name, is_float
+from sr_cli.input import line_reader
+from sr_cli.output import get_output_file_name, get_writer_class
+from sr_cli.statistics import Statistics
+from sr_cli.utils import is_float
 
 # Set up logging configuration
 log_level = os.getenv("LOG_LEVEL", "INFO").upper()
@@ -25,45 +27,28 @@ def process_data_file(input_file: Path, output_path: Path) -> dict[str, int | st
         dict[str, int | str | float]: A dictionary containing the processed results.
     """
     output_file = get_output_file_name(input_file, output_path)
-    num_lines, num_bytes, ip_counter, total_time = process_lines(input_file, output_file)
-    return calculate_stats(num_lines, ip_counter, total_time, num_bytes)
+    return process_lines(input_file, output_file)
 
 
-def process_lines(input_file: Path, output_file: Path) -> tuple[int, int, Counter, float]:
+def process_lines(input_file: Path, output_file: Path, format="JSON") -> dict[str, int | str | float]:
     """Process each line of the log file, extract relevant data, and write formatted output to the output file.
 
     Args:
         input_file (Path): The path to the log file to be processed.
         output_file (Path): The path to the output file where results will be saved.
+        format (str): The format for the output file.
     Returns:
-        tuple[int, int, Counter, float]: A tuple containing the number of lines processed, the total number of bytes, a Counter for client IPs, and the total processing time.
+        dict[str, int | str | float]: A dictionary containing the processed results.
     """
-    num_lines: int = 0
-    num_bytes: int = 0
-    ip = Counter()
-
-    with open(output_file, mode="w") as out_file:
-        out_file.write("[\n")
-        first_line = True
-        start_time = time.perf_counter()
+    with open(output_file, mode="w") as output_file_handle:
+        writer = get_writer_class(format)(output_file_handle)
+        stats = Statistics()
         for line in line_reader(input_file):
-            if not line.strip():  # Skip empty lines
-                continue
-
-            if not first_line:
-                out_file.write(",\n")
-            first_line = False
-
-            num_lines += 1
-            num_bytes += len(line)  # Calculate bytes based on the original line
             parsed_line = parse_line(line.strip())
-            client_ip = parsed_line.get("client_ip", "")
-            ip[client_ip] += 1
-            out_file.write(get_formatted_line(parsed_line))
-        end_time = time.perf_counter()
-        out_file.write("\n]")
-    total_time = end_time - start_time
-    return num_lines, num_bytes, ip, total_time
+            writer.write_line(parsed_line)
+            stats.update(parsed_line.get("client_ip"), len(line))
+        writer.finalize()
+    return stats.calculate_stats()
 
 
 def parse_line(fields: list[str]) -> dict[str, int | str | float]:
@@ -115,25 +100,6 @@ def parse_line(fields: list[str]) -> dict[str, int | str | float]:
     )
 
     return response
-
-
-def get_file_list(input_path: Path) -> list[Path]:
-    """Get a list of files from the input path.
-
-    Args:
-        input_path: The path to the input file or directory.
-
-    Returns:
-        list[Path]: A list of file paths.
-
-    """
-    if input_path.is_file():
-        return [input_path]
-    elif input_path.is_dir():
-        return [f for f in input_path.iterdir() if f.is_file()]
-    else:
-        log.error(f"Invalid input path: {input_path}")
-        return []
 
 
 if __name__ == "__main__":

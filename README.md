@@ -97,7 +97,6 @@ The tasks related to Docker, such as building the image, checking vulnerabilitie
 
 ## Some considerations processing the data
 
-- The empty lines will not be processed and will be skipped.
 - In the test data there is a line (82948) that contains 2 events together. The first line does not have all the fields and the next line is pasted with no `\n` separator. The parsing will read the missing fields of the first line as the first fields in the second line and will discard the rest of fields.
 - If theres is a mismatch between the expected and read fields, the parsing stops in this cases:
   - The number of read fields is shorter than 10 (expected number of fields). The parser will provide default values for the missing fields.

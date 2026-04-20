@@ -8,7 +8,55 @@ from pathlib import Path
 
 import pytest
 
-from sr_cli.line_reader import line_reader
+from sr_cli.input import get_file_list, line_reader
+
+
+def test_get_file_list_single_file(tmp_path: Path):
+    """Test get_file_list with a single file."""
+    test_file = tmp_path / "test.txt"
+    test_file.write_text("content")
+
+    result = get_file_list(test_file)
+    assert result == [test_file]
+
+
+def test_get_file_list_directory(tmp_path: Path):
+    """Test get_file_list with a directory containing multiple files."""
+    file1 = tmp_path / "file1.txt"
+    file2 = tmp_path / "file2.txt"
+    file1.write_text("content1")
+    file2.write_text("content2")
+
+    result = get_file_list(tmp_path)
+    assert len(result) == 2
+    assert file1 in result
+    assert file2 in result
+
+
+def test_get_file_list_empty_directory(tmp_path: Path):
+    """Test get_file_list with an empty directory."""
+    result = get_file_list(tmp_path)
+    assert result == []
+
+
+def test_get_file_list_invalid_path():
+    """Test get_file_list with an invalid path."""
+    invalid_path = Path("/nonexistent/path/to/file.txt")
+    result = get_file_list(invalid_path)
+    assert result == []
+
+
+def test_get_file_list_directory_with_subdirs(tmp_path: Path):
+    """Test get_file_list ignores subdirectories."""
+    file1 = tmp_path / "file1.txt"
+    file1.write_text("content")
+    subdir = tmp_path / "subdir"
+    subdir.mkdir()
+    file2 = subdir / "file2.txt"
+    file2.write_text("content")
+
+    result = get_file_list(tmp_path)
+    assert result == [file1]
 
 
 def test_line_reader_plain_text(tmp_path: Path):

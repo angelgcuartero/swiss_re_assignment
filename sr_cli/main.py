@@ -7,7 +7,8 @@ from typing import Annotated
 
 import typer
 
-from sr_cli.process import get_file_list, process_data_file
+from sr_cli.input import get_file_list
+from sr_cli.process import process_data_file
 
 # Set up logging configuration
 log_level = os.getenv("LOG_LEVEL", "INFO").upper()
