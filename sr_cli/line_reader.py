@@ -5,6 +5,7 @@ import gzip
 import io
 import lzma
 import zipfile
+from contextlib import contextmanager
 from pathlib import Path
 from typing import Generator
 
@@ -24,11 +25,13 @@ def get_custom_reader(file_path) -> tuple:
         file_name = zf.namelist()[0]
 
         # Return a function that ignores the mode and returns the text stream
+        # ZipFile should be closed after reading, so adding the decorator @contextlib.contextmanager manages this resource properly
+        @contextmanager
         def zip_reader_wrapper(*args, **kwargs):
             raw_file = zf.open(file_name, "r")
             # Wrap the raw bytes in a TextIOWrapper to read it as text because
             # zipfile returns a binary file-like object
-            return io.TextIOWrapper(raw_file, encoding="utf-8")
+            yield io.TextIOWrapper(raw_file, encoding="utf-8")
 
         return zip_reader_wrapper, "r"
     elif file_path.suffix in readers:
