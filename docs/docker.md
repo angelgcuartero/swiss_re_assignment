@@ -7,19 +7,25 @@ Make sure you have Docker installed on your machine: Follow the Docker installat
 Run the builder script:
 
 ```shell
-build_tools/build_docker.sh
+build_tools/build_docker_image.sh
 ```
 
 A Docker image will be created and tagged with the name and version included in `pyproject.toml`.
 
-## Checking vulneravilities in the Docker image
+## How to check vulnerabilities in the Docker image
 
-Trivy can check the vulnerabilies of the Docker image built with the project.
+### Manual check on demand
 
-> **Note**: The Docker Unix socket `/var/run/docker.sock` needs to be mounted to run properly, at least in ARM64 architectures. This may not be needed in AMD64. This is a potential dangerous point as it provides root privileges on the host.
+Trivy can check the vulnerabilies of the Docker image built with the project on demand in the command line with this script:
+
+```shell
+build_tools/check_docker_image.sh
+```
+
+> **Note**: The script invokes a `docker run` command with the Docker Unix socket `/var/run/docker.sock` as a parameter. It needs to be mounted to run properly, at least in ARM64 architectures. This may not be needed in AMD64. This is a potential dangerous point as it provides root privileges on the host.
 
 ```console
-$ docker run -v /var/run/docker.sock:/var/run/docker.sock aquasec/trivy image --severity CRITICAL,HIGH,UNKNOWN swiss-re-assignment:0.1.0
+$ build_tools/check_docker_image.sh
 2026-04-17T15:33:23Z    INFO    [vulndb] Need to update DB
 2026-04-17T15:33:23Z    INFO    [vulndb] Downloading vulnerability DB...
 2026-04-17T15:33:23Z    INFO    [vulndb] Downloading artifact...
@@ -135,6 +141,10 @@ Legend:
 - '-': Not scanned
 - '0': Clean (no security findings detected)
 ```
+
+### Automatic check on development
+
+A GitHub CI job has been configured to run on a pull_request event. This will use Snyk to check the vulnerabilies in the code. The configuration for this job in the `.github` folder.
 
 ## How to run with Docker
 

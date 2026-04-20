@@ -94,3 +94,11 @@ The code can be formatted with `ruff`. The same tool can be used to check if som
 ## Docker tasks
 
 The tasks related to Docker, such as building the image, checking vulnerabilities and running the container, are documented [in a separate document](./docs/docker.md).
+
+## Some considerations processing the data
+
+- The empty lines will not be processed and will be skipped.
+- In the test data there is a line (82948) that contains 2 events together. The first line does not have all the fields and the next line is pasted with no `\n ` separator. The parsing will read the missing fields of the first line as the first fields in the second line and will discard the rest of fields.
+- If theres is a mismatch between the expected and read fields, the parsing stops in this cases:
+  - The number of read fields is shorter than 10 (expected number of fields). The parser will provide default values for the missing fields.
+  - The number of read fields is longer than 10 (expected number of fields). The parser returns just the expected number and the rest is discarded.
