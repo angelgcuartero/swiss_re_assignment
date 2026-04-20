@@ -78,7 +78,6 @@ def test_parse_line_invalid_response_header_size():
     line = "1157689312.049   invalid 10.105.21.199 TCP_MISS/200 19763 CONNECT login.yahoo.com:443 badeyek DIRECT/209.73.177.115 -"
     result = parse_line(line)
 
-    
     assert isinstance(result["response_header_size"], int)
     assert result["response_header_size"] == 0
 

@@ -5,8 +5,8 @@ import os
 import time
 from collections import Counter
 from pathlib import Path
-from typing import Generator
 
+from sr_cli.line_reader import line_reader
 from sr_cli.utils import calculate_stats, get_formatted_line, get_output_file_name, is_float
 
 # Set up logging configuration
@@ -134,20 +134,6 @@ def get_file_list(input_path: Path) -> list[Path]:
     else:
         log.error(f"Invalid input path: {input_path}")
         return []
-
-
-def line_reader(file_path: Path) -> Generator[str, None, None]:
-    """Create a generator that yields lines from the file.
-
-    Args:
-        file_path: The path to the file to be read.
-
-    Yields:
-        str: The lines from the file.
-    """
-    with open(file_path, mode="r") as file:
-        for line in file:
-            yield line
 
 
 if __name__ == "__main__":
