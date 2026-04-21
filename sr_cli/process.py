@@ -2,8 +2,6 @@
 
 import logging
 import os
-import time
-from collections import Counter
 from pathlib import Path
 
 from sr_cli.input import line_reader
@@ -27,10 +25,10 @@ def process_data_file(input_file: Path, output_path: Path) -> dict[str, int | st
         dict[str, int | str | float]: A dictionary containing the processed results.
     """
     output_file = get_output_file_name(input_file, output_path)
-    return process_lines(input_file, output_file)
+    return _process_lines(input_file, output_file)
 
 
-def process_lines(input_file: Path, output_file: Path, format="JSON") -> dict[str, int | str | float]:
+def _process_lines(input_file: Path, output_file: Path, format="JSON") -> dict[str, int | str | float]:
     """Process each line of the log file, extract relevant data, and write formatted output to the output file.
 
     Args:
@@ -44,14 +42,14 @@ def process_lines(input_file: Path, output_file: Path, format="JSON") -> dict[st
         writer = get_writer_class(format)(output_file_handle)
         stats = Statistics()
         for line in line_reader(input_file):
-            parsed_line = parse_line(line.strip())
+            parsed_line = _parse_line(line.strip())
             writer.write_line(parsed_line)
             stats.update(parsed_line.get("client_ip"), len(line))
         writer.finalize()
     return stats.calculate_stats()
 
 
-def parse_line(fields: list[str]) -> dict[str, int | str | float]:
+def _parse_line(fields: list[str]) -> dict[str, int | str | float]:
     """Parse a log line and extract relevant fields. This is an example of the list of fields.
 
     Args:

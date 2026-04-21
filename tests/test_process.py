@@ -4,13 +4,13 @@ from pathlib import Path
 
 import pytest
 
-from sr_cli.process import line_reader, parse_line, process_data_file
+from sr_cli.process import _parse_line, line_reader, process_data_file
 
 
 def test_parse_line_valid_input():
     """Test parse_line with valid log line input."""
     line = "1157689312.049   5006 10.105.21.199 TCP_MISS/200 19763 CONNECT login.yahoo.com:443 badeyek DIRECT/209.73.177.115 -"
-    result = parse_line(line)
+    result = _parse_line(line)
 
     assert result["timestamp"] == 1157689312.049
     assert result["response_header_size"] == 5006
@@ -59,14 +59,14 @@ def test_parse_line_multiple_entries():
     ]
 
     for line, expected in zip(lines, results, strict=False):
-        result = parse_line(line)
+        result = _parse_line(line)
         assert result == expected
 
 
 def test_parse_line_invalid_timestamp():
     """Test parse_line with invalid timestamp, should be float."""
     line = "invalid_timestamp   5006 10.105.21.199 TCP_MISS/200 19763 CONNECT login.yahoo.com:443 badeyek DIRECT/209.73.177.115 -"
-    result = parse_line(line)
+    result = _parse_line(line)
 
     assert isinstance(result["timestamp"], float)
     assert result["timestamp"] == 0.0
@@ -75,7 +75,7 @@ def test_parse_line_invalid_timestamp():
 def test_parse_line_invalid_response_header_size():
     """Test parse_line with invalid response header size, should be numeric."""
     line = "1157689312.049   invalid 10.105.21.199 TCP_MISS/200 19763 CONNECT login.yahoo.com:443 badeyek DIRECT/209.73.177.115 -"
-    result = parse_line(line)
+    result = _parse_line(line)
 
     assert isinstance(result["response_header_size"], int)
     assert result["response_header_size"] == 0
@@ -84,7 +84,7 @@ def test_parse_line_invalid_response_header_size():
 def test_parse_line_invalid_response_size():
     """Test parse_line with invalid response size, should be numeric."""
     line = "1157689312.049   5006 10.105.21.199 TCP_MISS/200 invalid CONNECT login.yahoo.com:443 badeyek DIRECT/209.73.177.115 -"
-    result = parse_line(line)
+    result = _parse_line(line)
 
     assert isinstance(result["response_size"], int)
     assert result["response_size"] == 0
@@ -93,7 +93,7 @@ def test_parse_line_invalid_response_size():
 def test_parse_line_short_line():
     """Test parse_line with a line that has fewer fields than expected."""
     line = "1157689312.049"
-    result = parse_line(line)
+    result = _parse_line(line)
     assert result["timestamp"] == 1157689312.049
     assert result["response_header_size"] == 0
     assert result["client_ip"] == ""

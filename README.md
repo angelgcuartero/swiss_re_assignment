@@ -28,6 +28,14 @@ Follow `uv` installation instructions for your OS: <https://docs.astral.sh/uv/ge
 uv sync --group dev --group test
 ```
 
+### Package creation
+
+The Python package for this project can be created with this script:
+
+```shell
+build_tools/build_package.sh
+```
+
 ### Run the CLI (example)
 
 Executing the command-line tool with the `--help` flag with show the parameters and options the too accepts:
@@ -76,6 +84,12 @@ uv run swiss-re-assignment tests/resources tests/output --lfip --mfip --bytes --
 - Tests are written in pytest-style in the `tests` folder.
 - Unit tests are isolated from external state.
 
+Run the tests with:
+
+```shell
+tests/run_tests.sh
+```
+
 More info about the tests can be found [in the documentation folder](./docs/testing.md).
 
 ## Configuration
@@ -101,3 +115,5 @@ The tasks related to Docker, such as building the image, checking vulnerabilitie
 - If theres is a mismatch between the expected and read fields, the parsing stops in this cases:
   - The number of read fields is shorter than 10 (expected number of fields). The parser will provide default values for the missing fields.
   - The number of read fields is longer than 10 (expected number of fields). The parser returns just the expected number and the rest is discarded.
+- The stattistics are show per file. If there are more than one file, each file processed will show its statistics for the flags reported when invoked.
+- The stattistics are printed with the log.info function.

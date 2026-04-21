@@ -4,7 +4,7 @@ from collections import Counter
 
 import pytest
 
-from sr_cli.process import parse_line
+from sr_cli.process import _parse_line
 from sr_cli.statistics import Statistics
 
 
@@ -19,7 +19,7 @@ def test_calculate_stats_with_data():
     total_length = sum(len(line) for line in lines)
     stats = Statistics()
     for line in lines:
-        parsed_line = parse_line(line)
+        parsed_line = _parse_line(line)
         stats.update(parsed_line.get("client_ip"), len(str(line)))
     statistics = stats.calculate_stats()
 
@@ -58,7 +58,7 @@ def test_calculate_stats_multiple_ips():
     total_length = sum(len(line) for line in lines)
     stats = Statistics()
     for line in lines:
-        parsed_line = parse_line(line)
+        parsed_line = _parse_line(line)
         stats.update(parsed_line.get("client_ip"), len(str(line)))
     statistics = stats.calculate_stats()
 
@@ -76,7 +76,7 @@ def test_calculate_stats_single_ip():
     total_length = sum(len(line) for line in lines)
     stats = Statistics()
     for line in lines:
-        parsed_line = parse_line(line)
+        parsed_line = _parse_line(line)
         stats.update(parsed_line.get("client_ip"), len(str(line)))
     statistics = stats.calculate_stats()
 

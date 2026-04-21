@@ -3,7 +3,6 @@
 import bz2
 import gzip
 import io
-import json
 import logging
 import lzma
 import os
@@ -37,7 +36,7 @@ def get_file_list(input_path: Path) -> list[Path]:
         return []
 
 
-def get_custom_reader(file_path) -> tuple[callable, str]:
+def _get_custom_reader(file_path) -> tuple[callable, str]:
     """Return the appropriate reader function based on the file extension.
 
     Args:
@@ -51,7 +50,7 @@ def get_custom_reader(file_path) -> tuple[callable, str]:
         zf = zipfile.ZipFile(file_path)
         file_name = zf.namelist()[0]
 
-        # Return a function that ignores the mode and returns the text stream
+        # Return a function that ignores the mode and returns the text stream.
         # ZipFile should be closed after reading, so adding the decorator
         # contextlib.contextmanager manages this resource properly
         @contextmanager
@@ -77,7 +76,7 @@ def line_reader(file_path: Path) -> Generator[str, None, None]:
     Yields:
         str: The lines from the file.
     """
-    custom_reader, mode = get_custom_reader(file_path)
+    custom_reader, mode = _get_custom_reader(file_path)
     with custom_reader(file_path, mode=mode, encoding="utf-8") as file:
         for line in file:
             yield line
