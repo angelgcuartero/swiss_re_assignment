@@ -120,3 +120,4 @@ The tasks related to Docker, such as building the image, checking vulnerabilitie
 - At first, I considered using Pandas or Polars, but I quickly came to two conclusions:
   - They are very slow at loading files.
   - The use case involves processing large files, and we don't want to overload the memory, so it's better to read them line by line.
+- The [project for this assignment](https://github.com/users/angelgcuartero/projects/2) uses a Kanban board to track the tickets and related tasks. I created tickets roughly for all the tasks, a branch and pull requests for each functionality.
