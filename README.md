@@ -116,4 +116,7 @@ The tasks related to Docker, such as building the image, checking vulnerabilitie
   - The number of read fields is shorter than 10 (expected number of fields). The parser will provide default values for the missing fields.
   - The number of read fields is longer than 10 (expected number of fields). The parser returns just the expected number and the rest is discarded.
 - The stattistics are show per file. If there are more than one file, each file processed will show its statistics for the flags reported when invoked.
-- The stattistics are printed with the log.info function.
+- The stattistics are printed with the `log.info` function.
+- At first, I considered using Pandas or Polars, but I quickly came to two conclusions:
+  - They are very slow at loading files.
+  - The use case involves processing large files, and we don't want to overload the memory, so it's better to read them line by line.
