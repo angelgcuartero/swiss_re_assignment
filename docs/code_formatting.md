@@ -7,7 +7,7 @@ The configuration for formatting the code follows specified in the [pyproject.to
 To reformat the code just run:
 
 ```shell
-ruff format
+uv run ruff check --select I --fix; uv run ruff format
 ```
 
 ## Checking the docstrings
@@ -17,5 +17,5 @@ The configuration for the docstring follows the pydocstyle convention [PEP257](h
 To check the docstrings just run:
 
 ```shell
-ruff check --select D
+uv run ruff check --select D  --fix
 ```
