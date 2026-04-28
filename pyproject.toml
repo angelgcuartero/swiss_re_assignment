@@ -5,7 +5,6 @@ description = "Coding assignment for Swiss Re recruitment process"
 readme = "README.md"
 requires-python = ">=3.12"
 dependencies = [
-    "logging>=0.4.9.6", 
     "typer>=0.24.1"
 ]
 
