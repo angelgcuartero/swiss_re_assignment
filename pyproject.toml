@@ -1,6 +1,6 @@
 [project]
 name = "swiss-re-assignment"
-version = "0.1.0"
+version = "0.1.1"
 description = "Coding assignment for Swiss Re recruitment process"
 readme = "README.md"
 requires-python = ">=3.12"
