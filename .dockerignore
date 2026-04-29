@@ -30,3 +30,6 @@ build_tools
 docker-compose.yml
 Dockerfile
 LICENSE
+tests/
+docs/
+__pycache__/
