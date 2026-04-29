@@ -54,7 +54,7 @@ def _get_custom_reader(file_path) -> tuple[callable, str]:
         # ZipFile should be closed after reading, so adding the decorator
         # contextlib.contextmanager manages this resource properly
         @contextmanager
-        def zip_reader_wrapper(*args, **kwargs):
+        def zip_reader_wrapper():
             raw_file = zf.open(file_name, "r")
             # Wrap the raw bytes in a TextIOWrapper to read it as text because
             # zipfile returns a binary file-like object

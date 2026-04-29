@@ -49,35 +49,6 @@ class Writer(ABC):
 
 
 class JSONWriter(Writer):
-    """Class to handle writing JSON-formatted lines to an output file."""
-
-    def __init__(self, output_file: TextIOWrapper):
-        """Initialize the JSONWriter with the output file."""
-        self.format = "JSON"
-        super().__init__(output_file)
-        self.first_line = True
-
-    def get_formatted_line(self, parsed_line: dict) -> str:
-        """Format the parsed line as a JSON string."""
-        return json.dumps(parsed_line)
-
-    def write_line(self, line: dict) -> None:
-        """Write a formatted line to the output file, handling commas and newlines appropriately."""
-        if self.first_line:
-            self.output_file.write("[\n")
-            self.first_line = False
-        else:
-            self.output_file.write(",\n")
-        formatted_line = self.get_formatted_line(line)
-        self.output_file.write(formatted_line)
-
-    def finalize(self) -> None:
-        """Finalize the output file by writing the closing bracket if necessary."""
-        if not self.first_line:  # Only write closing bracket if we have written at least one line
-            self.output_file.write("\n]")
-
-
-class JSONStatsWriter(Writer):
     """Class to handle writing JSON-formatted statistics to an output file."""
 
     def __init__(self, output_file: TextIOWrapper):
@@ -88,7 +59,7 @@ class JSONStatsWriter(Writer):
     def get_formatted_line(self, parsed_line: dict) -> str:
         """Format the parsed line as a JSON string."""
         return json.dumps(parsed_line)
-    
+
     def write_line(self, line: dict) -> None:
         """Write the statistics formatted as JSON to the output file."""
         formatted_line = self.get_formatted_line(line)
@@ -135,7 +106,7 @@ def get_writer_class(format: str = "JSON") -> Writer:
     """
     match format.upper():
         case "JSON":
-            return JSONStatsWriter
+            return JSONWriter
         case "TEXT":
             return TextWriter
         case _:

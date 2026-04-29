@@ -8,6 +8,7 @@ from typing import Annotated
 import typer
 
 from sr_cli.input import get_file_list
+from sr_cli.logstatistic import LogStatistics
 from sr_cli.process import process_data_file
 
 # Set up logging configuration
@@ -63,16 +64,16 @@ def process(
 
     for file in input_files:
         log.info(f"Processing file: {file}")
-        extracted_data = process_data_file(file, output)
+        stats: LogStatistics = process_data_file(file, output)
 
         if mfip:
-            log.info(f"Most frequent IP: {extracted_data.get('mfip')}")
+            log.info(f"Most frequent IP: {stats.mfip}")
         if lfip:
-            log.info(f"Least frequent IP: {extracted_data.get('lfip')}")
+            log.info(f"Least frequent IP: {stats.lfip}")
         if eps:
-            log.info(f"Events per second: {extracted_data.get('eps')}")
+            log.info(f"Events per second: {stats.eps}")
         if bytes:
-            log.info(f"Total bytes processed: {extracted_data.get('bytes')}")
+            log.info(f"Total bytes processed: {stats.bytes}")
 
 
 if __name__ == "__main__":
