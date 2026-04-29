@@ -121,3 +121,55 @@ The tasks related to Docker, such as building the image, checking vulnerabilitie
   - They are very slow at loading files.
   - The use case involves processing large files, and we don't want to overload the memory, so it's better to read them line by line.
 - The [project for this assignment](https://github.com/users/angelgcuartero/projects/2) uses a Kanban board to track the tickets and related tasks. I created tickets roughly for all the tasks, a branch and pull requests for each functionality.
+
+## Live Coding
+
+### New functionality 1
+
+Problem 1: prevent the CLI from running without options
+
+Task: modify the CLI code to prevent it from running without any options. In that case, the CLI should print a helpful message and exit with a non-zero status code.
+
+Input:
+
+```shell
+swiss-re-assignment ./input/ ./output
+```
+
+CMD Output:
+
+```console
+Usage: swiss-re-assignment [OPTIONS] INPUT_FILE OUTPUT_PATH
+Try 'swiss-re-assignment --help' for help.
+```
+
+### New functionality 2
+
+Problem 2: fix the logic to report the statistics in the output files
+
+Task: modify the code to ensure that the statistics are correctly calculated and reported in the output files.
+
+Input:
+
+```shell
+swiss-re-assignment --mfip --lfip --eps --bytes ./input/ ./output
+```
+
+Output file:
+
+```json
+{
+  "processed_file": "path/input/access.log.gz",
+    "num_lines": 1643520,
+    "mfip": "127.0.0.1",
+    "lfip": "210.10.215.171",
+    "eps": 158363.14226580103,
+    "bytes": 220115207
+}
+```
+
+### New functionality 3
+
+Problem 3: refactor to use domain data classes instead of primitive types
+
+Task: refactor the code to use domain data classes with a clear separation of concerns instead of primitive types (i.e. dictionaries). For instance, the class names could be: LogLine, and LogStatistics.
