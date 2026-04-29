@@ -55,6 +55,11 @@ def process(
 
     """
     input_files = get_file_list(input)
+    options = [mfip, lfip, eps, bytes]
+
+    if not any(options):
+        log.error("No options provided. Please specify at least one option to calculate.")
+        raise typer.Exit(code=1)
 
     for file in input_files:
         log.info(f"Processing file: {file}")
