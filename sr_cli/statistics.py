@@ -47,7 +47,6 @@ class Statistics:
         eps = self.num_lines / self.total_time if self.total_time > 0 else None  # Avoid division by zero
 
         return {
-            "num_lines": self.num_lines,
             "mfip": mfip,
             "lfip": lfip,
             "eps": eps,

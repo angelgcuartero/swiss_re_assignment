@@ -38,13 +38,13 @@ def _process_lines(input_file: Path, output_file: Path, format="JSON") -> dict[s
     Returns:
         dict[str, int | str | float]: A dictionary containing the processed results.
     """
+    stats = Statistics()
+    for line in line_reader(input_file):
+        parsed_line = _parse_line(line.strip())
+        stats.update(parsed_line.get("client_ip"), len(line))
     with open(output_file, mode="w") as output_file_handle:
         writer = get_writer_class(format)(output_file_handle)
-        stats = Statistics()
-        for line in line_reader(input_file):
-            parsed_line = _parse_line(line.strip())
-            writer.write_line(parsed_line)
-            stats.update(parsed_line.get("client_ip"), len(line))
+        writer.write_line(stats.calculate_stats())
         writer.finalize()
     return stats.calculate_stats()
 

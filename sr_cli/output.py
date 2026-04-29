@@ -77,6 +77,28 @@ class JSONWriter(Writer):
             self.output_file.write("\n]")
 
 
+class JSONStatsWriter(Writer):
+    """Class to handle writing JSON-formatted statistics to an output file."""
+
+    def __init__(self, output_file: TextIOWrapper):
+        """Initialize the JSONStatsWriter with the output file."""
+        self.format = "JSON"
+        super().__init__(output_file)
+
+    def get_formatted_line(self, parsed_line: dict) -> str:
+        """Format the parsed line as a JSON string."""
+        return json.dumps(parsed_line)
+    
+    def write_line(self, line: dict) -> None:
+        """Write the statistics formatted as JSON to the output file."""
+        formatted_line = self.get_formatted_line(line)
+        self.output_file.write(formatted_line)
+
+    def finalize(self) -> None:
+        """Finalize the output file (no special handling needed for statistics)."""
+        ...
+
+
 class TextWriter(Writer):
     """Class to handle writing plain text lines to an output file."""
 
@@ -113,7 +135,7 @@ def get_writer_class(format: str = "JSON") -> Writer:
     """
     match format.upper():
         case "JSON":
-            return JSONWriter
+            return JSONStatsWriter
         case "TEXT":
             return TextWriter
         case _:
